@@ -1,10 +1,11 @@
-// src/screens/Cifra.tsx
 import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
   Text,
   StyleSheet,
+  ImageBackground,
+  View,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import harpa from '../../assets/harpa.json';
@@ -21,6 +22,20 @@ export default function Cifra({ route }: { route: CifraRouteProp }) {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.error}>Hino não encontrado.</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (!hymn.cifra || hymn.cifra.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.emptyState}>
+          <ImageBackground
+            source={require('../../assets/not_found.png')}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        </View>
       </SafeAreaView>
     );
   }
@@ -53,7 +68,27 @@ export default function Cifra({ route }: { route: CifraRouteProp }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f6f7f9' },
+  container: {
+    flex: 1,
+  },
+  background: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.85)', // opcional
+  },
+  image: {
+    width: '100%',
+    padding: 16,
+    height: '100%'
+  },
   content: { padding: 16 },
   title: {
     fontSize: 20,
@@ -76,4 +111,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
+  emptyState: {
+    flex: 1
+  }
 });
