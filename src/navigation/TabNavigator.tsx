@@ -15,15 +15,15 @@ export default function TabNavigator() {
         tabBarIcon: ({ color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = 'home';
 
-          if (route.name === 'Buscar') iconName = 'search';
+          if (route.name === 'Outros Hinos') iconName = 'musical-notes';
           else if (route.name === 'Harpa Offline') iconName = 'book';
-          else if (route.name === 'Listas') iconName = 'list';
+          else if (route.name === 'Minhas Listas') iconName = 'albums';
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
-      <Tab.Screen name="Buscar" component={Buscar} />
+      <Tab.Screen name="Outros Hinos" component={Buscar} />
       <Tab.Screen name="Harpa Offline" component={Harpa} />
       <Tab.Screen name="Minhas Listas" component={Listas} />
     </Tab.Navigator>

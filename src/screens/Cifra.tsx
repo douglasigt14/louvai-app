@@ -60,8 +60,10 @@ export default function Cifra({ route }: { route: CifraRouteProp }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>{hymn.name}</Text>
-        {hymn.cifra.map(renderLine)}
+        <View style={styles.card}>
+          <Text style={styles.title}>{hymn.name}</Text>
+          {hymn.cifra.map(renderLine)}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -89,7 +91,10 @@ const styles = StyleSheet.create({
     padding: 16,
     height: '100%'
   },
-  content: { padding: 16 },
+  content: { 
+    paddingVertical: 20, 
+    paddingHorizontal: 8
+  },
   title: {
     fontSize: 20,
     fontWeight: '700',
@@ -113,5 +118,16 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     flex: 1
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+    marginBottom: 16,
   }
 });
