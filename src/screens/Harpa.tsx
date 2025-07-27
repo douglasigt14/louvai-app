@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,6 +6,7 @@ import {
   Text,
   Pressable,
   StyleSheet,
+  TextInput,
 } from 'react-native';
 import harpa from '../../assets/harpa.json';
 import { useNavigation } from '@react-navigation/native';
@@ -16,12 +17,21 @@ type NavProp = NativeStackNavigationProp<RootStackParamList, 'Harpa'>;
 
 export default function Harpa() {
   const navigation = useNavigation<NavProp>();
+  const [searchText, setSearchText] = useState('');
+
+  const filteredHarpa = useMemo(() => {
+    if (!searchText) return harpa;
+    const lowerSearch = searchText.toLowerCase();
+    return harpa.filter(
+      item =>
+        item.name.toLowerCase().includes(lowerSearch) ||
+        item.id.toString().includes(lowerSearch)
+    );
+  }, [searchText]);
+
   const renderItem = ({ item }: { item: { id: number; name: string } }) => (
     <Pressable
-      style={({ pressed }) => [
-        styles.item,
-        pressed && styles.itemPressed,
-      ]}
+      style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
       android_ripple={{ color: '#eee' }}
       onPress={() => navigation.navigate('Cifra', { id: item.id })}
     >
@@ -36,8 +46,15 @@ export default function Harpa() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Buscar..."
+        value={searchText}
+        onChangeText={setSearchText}
+        placeholderTextColor="#999"
+      />
       <FlatList
-        data={harpa}
+        data={filteredHarpa}
         keyExtractor={item => String(item.id)}
         renderItem={renderItem}
         contentContainerStyle={styles.listContent}
@@ -55,6 +72,21 @@ const styles = StyleSheet.create({
   listContent: {
     padding: 8,
   },
+  searchInput: {
+    marginHorizontal: 12,
+    marginVertical: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    fontSize: 16,
+    color: '#333',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -63,12 +95,10 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 12,
     borderRadius: 10,
-    // Sombra iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    // Elevação Android
     elevation: 2,
   },
   itemPressed: {
