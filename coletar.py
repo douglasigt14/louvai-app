@@ -5,10 +5,12 @@ from urllib.parse import urlparse
 
 # Lista de tuplas: (ID, URL completa do hino no Cifra Club)
 hinos = [
-    (23, "https://www.cifraclub.com.br/leandro-izauto/23-gloria-a-jesus/"),
-    (24, "https://www.cifraclub.com.br/leandro-izauto/24-poder-pentecostal/"),
-    (25, "https://www.cifraclub.com.br/harpa-crista/jesus-tu-es-bom-n25/"),
-    (26, "https://www.cifraclub.com.br/harpa-crista/a-formosa-jerusalem-026/")
+    (41, "https://www.cifraclub.com.br/eder-g-de-zen/a-cristo-coroai/"),
+    (42, "https://www.cifraclub.com.br/harpa-crista/saudai-jesus/"),
+    (43, "https://www.cifraclub.com.br/leandro-izauto/43-doce-lar/"),
+    (44, "https://www.cifraclub.com.br/leandro-izauto/44-oh-que-gloria/"),
+    (45, "https://www.cifraclub.com.br/harpa-crista/redentor-onipotente/"),
+    (46, "https://www.cifraclub.com.br/harpa-crista/046-um-pendao-real/")
 ]
 
 result = []
