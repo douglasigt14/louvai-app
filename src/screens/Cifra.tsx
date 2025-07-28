@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import harpa from '../../assets/harpa.json';
 
 type RootStackParamList = { Harpa: undefined; Cifra: { id: number } };
@@ -87,13 +88,14 @@ export default function Cifra({ route }: { route: CifraRouteProp }) {
   }
 
   const originalKey = detectKey(hymn.cifra) || 'C';
+  const [selectedKey, setSelectedKey] = useState(originalKey);
 
-  const getDisplayedKey = () => {
+  const handleKeyChange = (newKey: string) => {
     const index = CHORDS.indexOf(originalKey);
-    if (index === -1) return '';
-    const newIndex = (index + transpose + 12) % 12;
-    const chord = CHORDS[newIndex];
-    return FLAT_EQUIV[chord] || chord;
+    const newIndex = CHORDS.indexOf(EQUIV[newKey] || newKey);
+    const diff = newIndex - index;
+    setTranspose(diff);
+    setSelectedKey(newKey);
   };
 
   const renderLine = (line: string, index: number) => {
@@ -119,14 +121,51 @@ export default function Cifra({ route }: { route: CifraRouteProp }) {
         <View style={styles.card}>
           <Text style={styles.title}>{hymn.name}</Text>
 
-          <View style={styles.transposeButtons}>
-            <TouchableOpacity onPress={() => setTranspose(t => t - 1)}>
-              <Text style={styles.transposeButton}>–</Text>
-            </TouchableOpacity>
-            <Text style={styles.transposeLabel}>Tom: {getDisplayedKey()}</Text>
-            <TouchableOpacity onPress={() => setTranspose(t => t + 1)}>
-              <Text style={styles.transposeButton}>+</Text>
-            </TouchableOpacity>
+          <View style={styles.headerContent}>
+             
+             <View style={styles.autoScrollContent}>
+                <Text></Text>
+             </View>
+            {/* Troca de Tom */}
+            <View style={styles.transposeButtons}>
+              <TouchableOpacity onPress={() => {
+                const newT = transpose - 1;
+                setTranspose(newT);
+                const index = CHORDS.indexOf(originalKey);
+                const newKey = CHORDS[(index + newT + 12) % 12];
+                setSelectedKey(FLAT_EQUIV[newKey] || newKey);
+              }}>
+                <Text style={styles.transposeButton}>–</Text>
+              </TouchableOpacity>
+
+              <View style={styles.pickerWrapper}>
+                <Text style={styles.transposeLabel}>Tom: {selectedKey}</Text>
+                <Picker
+                  selectedValue={selectedKey}
+                  onValueChange={handleKeyChange}
+                  style={styles.inlinePicker}
+                  mode="dropdown"
+                >
+                  {CHORDS.map(key => (
+                    <Picker.Item
+                      key={key}
+                      label={FLAT_EQUIV[key] || key}
+                      value={FLAT_EQUIV[key] || key}
+                    />
+                  ))}
+                </Picker>
+              </View>
+
+              <TouchableOpacity onPress={() => {
+                const newT = transpose + 1;
+                setTranspose(newT);
+                const index = CHORDS.indexOf(originalKey);
+                const newKey = CHORDS[(index + newT + 12) % 12];
+                setSelectedKey(FLAT_EQUIV[newKey] || newKey);
+              }}>
+                <Text style={styles.transposeButton}>+</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {hymn.cifra.map(renderLine)}
@@ -173,12 +212,23 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 16,
   },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+    marginBottom: 12,
+  },
+  autoScrollContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
   transposeButtons: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     gap: 16,
-    marginBottom: 12,
   },
   transposeButton: {
     fontSize: 24,
@@ -190,5 +240,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#444',
+  },
+  pickerWrapper: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  inlinePicker: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    color: 'black',
+    backgroundColor: 'transparent',
+    opacity: 0,
   },
 });
