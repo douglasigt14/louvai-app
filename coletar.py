@@ -5,31 +5,7 @@ from urllib.parse import urlparse
 
 # Lista de tuplas: (ID, URL completa do hino no Cifra Club)
 hinos = [
-(226, "https://www.cifraclub.com.br/harpa-crista/cristo-teu-santo-amor/intermediario.html"),
-(227, "https://www.cifraclub.com.br/harpa-crista/deus-amou-este-mundo/"),
-(228, "https://www.cifraclub.com.br/harpa-crista/este-mundo-nao-compreende/"),
-(229, "https://www.cifraclub.com.br/harpa-crista/jesus-meigo-salvador/"),
-(230, "https://www.cifraclub.com.br/harpa-crista/nos-vogamos-nesta-nau/hgkwtm.html"),
-(231, "https://www.cifraclub.com.br/harpa-crista/nao-foi-com-ouro/"),
-(232, "https://www.cifraclub.com.br/harpa-crista/os-bem-aventurados/"),
-(233, "https://www.cifraclub.com.br/harpa-crista/hino-199-a-ceia-do-senhor/"),
-(234, "https://www.cifraclub.com.br/harpa-crista/o-gozo-dos-santos/cifra.html"),
-(235, "https://www.cifraclub.com.br/harpa-crista/ja-sei-ja-sei/"),
-(236, "https://www.cifraclub.com.br/harpa-crista/ja-nos-lavou/"),
-(237, "https://www.cifraclub.com.br/harpa-crista/o-gozo-de-estar-preparado/cifra.html"),
-(238, "https://www.cifraclub.com.br/harpa-crista/o-pecador-desalentado/"),
-(239, "https://www.cifraclub.com.br/harpa-crista/imploramos-consolador/"),
-(240, "https://www.cifraclub.com.br/harpa-crista/oh-dia-alegre/"),
-(241, "https://www.cifraclub.com.br/harpa-crista/marchemos-sem-temor/"),
-(242, "https://www.cifraclub.com.br/harpa-crista/eu-confio-firmemente/"),
-(243, "https://www.cifraclub.com.br/harpa-crista/ao-abrir-culto-243/"),
-(244, "https://www.cifraclub.com.br/harpa-crista/louvai-jesus/"),
-(245, "https://www.cifraclub.com.br/harpa-crista/paz-de-deus-em-jesus-encontrei/"),
-(246, "https://www.cifraclub.com.br/harpa-crista/o-descanso-em-jesus/"),
-(247, "https://www.cifraclub.com.br/harpa-crista/deus-nos-guarde-no-seu-amor/"),
-(248, "https://www.cifraclub.com.br/harpa-crista/hosana-gloria/"),
-(249, "https://www.cifraclub.com.br/harpa-crista/o-vem-senhor-habita/"),
-(250, "https://www.cifraclub.com.br/harpa-crista/noiva-de-jesus-apronta-te/")
+(300, "https://www.cifraclub.com.br/harpa-crista/300-nossa-esperanca-/")
 ]
 
 result = []
