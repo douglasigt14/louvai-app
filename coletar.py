@@ -1,55 +1,57 @@
 import requests
 import time
 import json
+from urllib.parse import urlparse
 
-# Lista com ID, slug do hino e, opcionalmente, slug do artista
-hinos = [ 
-    (18, "grata-nova"), 
-    (19, "19-o-convite-de-cristo", "leandro-izauto"), 
-    (20, "olhai-pra-cordeiro-de-deus"), 
-    (21, "21-gloriosa-aurora", "leandro-izauto" ),  
+# Lista de tuplas: (ID, URL completa do hino no Cifra Club)
+hinos = [
+    (23, "https://www.cifraclub.com.br/leandro-izauto/23-gloria-a-jesus/"),
+    (24, "https://www.cifraclub.com.br/leandro-izauto/24-poder-pentecostal/"),
+    (25, "https://www.cifraclub.com.br/harpa-crista/jesus-tu-es-bom-n25/"),
+    (26, "https://www.cifraclub.com.br/harpa-crista/a-formosa-jerusalem-026/")
 ]
 
-DEFAULT_ARTIST = "harpa-crista"
 result = []
-
 inicio = 1
 fim = 640
 
-# Filtrar apenas os IDs no intervalo desejado
+# Filtrar IDs válidos
 hinos = [h for h in hinos if inicio <= h[0] <= fim]
 
-for hino in hinos:
-    # Suporte a 2 ou 3 elementos por tupla
-    id_ = hino[0]
-    slug = hino[1]
-    artist_slug = hino[2] if len(hino) > 2 else DEFAULT_ARTIST
-
-    print(f"Buscando hino {id_}: {slug} (artista: {artist_slug})")
-    
-    if not slug:
-        print(f"⚠️  Hino {id_} ignorado: slug ausente")
-        continue
-
-    url = f"https://louvai-api-cifra-club.fly.dev/artists/{artist_slug}/songs/{slug}"
+for id_, full_url in hinos:
+    print(f"\n🔍 Processando hino {id_}: {full_url}")
     
     try:
+        parsed = urlparse(full_url)
+        path_parts = parsed.path.strip("/").split("/")
+
+        if len(path_parts) < 2:
+            print(f"⚠️  URL inválida para hino {id_}, ignorando...")
+            continue
+
+        artist_slug, song_slug = path_parts[0], path_parts[1]
+
+        url = f"https://louvai-api-cifra-club.fly.dev/artists/{artist_slug}/songs/{song_slug}"
+        print(f"➡️  URL gerada: {url}")
+
         response = requests.get(url, timeout=60)
         response.raise_for_status()
         data = response.json()
+
         result.append({
             "id": id_,
-            "name": data.get("name", slug.replace("-", " ").title()),
-            "artist": data.get("artist", "Harpa Cristã"),
+            "name": data.get("name", song_slug.replace("-", " ").title()),
+            "artist": data.get("artist", artist_slug.replace("-", " ").title()),
             "cifra": data.get("cifra", []),
-            "url": data.get("cifraclub_url", url)
+            "url": data.get("cifraclub_url", full_url)
         })
+
     except Exception as e:
         print(f"❌ Erro ao buscar hino {id_}: {e}")
-    
-    time.sleep(1)  # evitar sobrecarregar a API
 
-# Salvar resultado em JSON
+    time.sleep(1)
+
+# Salvar resultado no JSON
 with open("hinos_coletados.json", "w", encoding="utf-8") as f:
     json.dump(result, f, ensure_ascii=False, indent=2)
 
